@@ -7,18 +7,31 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+
 async function testReviewConnection() {
     const functionUrl =
         "https://nneqgurexjphnauxzqbu.supabase.co/functions/v1/submit-review";
 
-    const tokenInput = document.querySelector(
-        '#reviewForm input[name="cf-turnstile-response"]'
+    const widget = document.querySelector(
+        "#reviewForm .cf-turnstile"
     );
 
-    const token = tokenInput?.value;
+    if (!widget) {
+        console.log("Turnstile widget not found.");
+        return;
+    }
+
+    if (typeof turnstile === "undefined") {
+        console.log("Turnstile has not loaded.");
+        return;
+    }
+
+    const token = turnstile.getResponse(widget);
 
     if (!token) {
-        console.log("No CAPTCHA token available.");
+        console.log(
+            "No CAPTCHA token available. Complete the CAPTCHA and try again."
+        );
         return;
     }
 
@@ -44,5 +57,8 @@ async function testReviewConnection() {
 
     } catch (error) {
         console.error("Connection error:", error);
+    } finally {
+        turnstile.reset(widget);
     }
 }
+
