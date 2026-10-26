@@ -155,3 +155,92 @@ document.addEventListener(
 );
 
 
+/* =====================================
+   CUSTOMER REVIEW FORM SUBMISSION
+===================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("reviewForm");
+  const status = document.getElementById("reviewStatus");
+
+  if (!form || !status) return;
+
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const button = form.querySelector('button[type="submit"]');
+    const widget = form.querySelector(".cf-turnstile");
+
+    if (!form.reportValidity()) return;
+
+    if (typeof turnstile === "undefined" || !widget) {
+      status.textContent = "CAPTCHA is not ready.";
+      return;
+    }
+
+    const token = turnstile.getResponse(widget);
+
+    if (!token) {
+      status.textContent = "Please complete the CAPTCHA.";
+      return;
+    }
+
+    // Photo uploads will be enabled separately.
+    const photos = document.getElementById("reviewPhotos");
+
+    if (photos && photos.files.length > 0) {
+      status.textContent =
+        "Photo uploads are not available yet. Please remove the photos.";
+      return;
+    }
+
+    button.disabled = true;
+    status.textContent = "Submitting your review...";
+
+    try {
+      const response = await fetch(
+        `${REVIEW_SUPABASE_URL}/functions/v1/submit-review`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            customer_name:
+              document.getElementById("reviewName").value.trim(),
+            rating: Number(
+              document.getElementById("reviewRating").value
+            ),
+            review_text:
+              document.getElementById("reviewMessage").value.trim(),
+            turnstileToken: token
+          })
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok || result.success !== true) {
+        throw new Error(
+          result.error || "Review submission failed."
+        );
+      }
+
+      status.textContent =
+        "Thank you! Your review is awaiting approval.";
+
+      form.reset();
+
+    } catch (error) {
+      status.textContent = error.message;
+      console.error("Review submission error:", error);
+
+    } finally {
+      turnstile.reset(widget);
+      button.disabled = false;
+    }
+  });
+});
+
+
+
