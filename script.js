@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function testReviewConnection() {
     const functionUrl =
-        "https://nneqgurexjphnauxzqbu.supabase.co/functions/v1/submit-review";
+        "https://nneqgurexjpnhauxzqbu.supabase.co/functions/v1/submit-review";
 
     const widget = document.querySelector(
         "#reviewForm .cf-turnstile"
