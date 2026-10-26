@@ -7,12 +7,20 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-
-
-
 async function testReviewConnection() {
     const functionUrl =
-        "https://nneqgurexjpnhauxzqbu.supabase.co/functions/v1/submit-review";
+        "https://nneqgurexjphnauxzqbu.supabase.co/functions/v1/submit-review";
+
+    const tokenInput = document.querySelector(
+        '#reviewForm input[name="cf-turnstile-response"]'
+    );
+
+    const token = tokenInput?.value;
+
+    if (!token) {
+        console.log("No CAPTCHA token available.");
+        return;
+    }
 
     try {
         const response = await fetch(functionUrl, {
@@ -24,18 +32,17 @@ async function testReviewConnection() {
                 customer_name: "Test Customer",
                 rating: 5,
                 review_text:
-                    "Testing HRU Tech Solutions review system.",
-                turnstileToken: ""
+                    "Testing HRU Tech Solutions review verification.",
+                turnstileToken: token
             })
         });
 
         const result = await response.json();
 
-        console.log("Review API status:", response.status);
-        console.log("Review API response:", result);
+        console.log("HTTP Status:", response.status);
+        console.log("Supabase Response:", result);
 
     } catch (error) {
-        console.error("Connection failed:", error);
+        console.error("Connection error:", error);
     }
 }
-
