@@ -393,3 +393,41 @@ a {
         text-align: center;
     }
 }
+
+
+/* CUSTOMER REVIEWS */
+
+#customer-reviews {
+    background: #f3f7fb;
+}
+
+#reviewForm {
+    max-width: 650px;
+    margin: 30px auto;
+}
+
+#reviewForm input[type="file"] {
+    background: white;
+    border: 1px solid #dce5ee;
+    border-radius: 8px;
+    padding: 12px;
+    width: 100%;
+    max-width: 100%;
+}
+
+#reviewForm .cf-turnstile {
+    margin: 20px 0;
+}
+
+#reviewForm button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+#approvedReviews {
+    margin-top: 20px;
+    padding: 25px;
+    background: white;
+    border-radius: 12px;
+    text-align: center;
+}

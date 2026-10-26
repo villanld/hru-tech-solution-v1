@@ -265,42 +265,121 @@
     </section>
 
 
-    <!-- CUSTOMER REVIEWS -->
-    <section id="customer-reviews" class="section">
-        <div class="container">
+<!-- CUSTOMER REVIEWS -->
+<section id="customer-reviews" class="section">
+    <div class="container">
 
-            <div class="section-heading">
-                <span class="section-label">
-                    CUSTOMER FEEDBACK
-                </span>
+        <div class="section-heading">
+            <span class="section-label">
+                CUSTOMER FEEDBACK
+            </span>
 
-                <h2>Customer Reviews & Ratings</h2>
+            <h2>Customer Reviews & Ratings</h2>
 
-                <p>
-                    Share your experience with
-                    HRU Tech Solutions.
-                </p>
-            </div>
-
-            <div class="contact-form">
-
-                <h3>Leave a Review</h3>
-
-                <p>
-                    Customer reviews and photo uploads
-                    will be available soon.
-                </p>
-
-                <!-- Cloudflare Turnstile -->
-                <div
-                    class="cf-turnstile"
-                    data-sitekey="YOUR_SITE_KEY">
-                </div>
-
-            </div>
-
+            <p>
+                Share your experience with
+                HRU Tech Solutions.
+            </p>
         </div>
-    </section>
+
+        <form id="reviewForm" class="contact-form">
+
+            <h3>Leave a Review</h3>
+
+            <label for="reviewName">
+                Your Name
+            </label>
+
+            <input
+                type="text"
+                id="reviewName"
+                name="customer_name"
+                maxlength="100"
+                required
+            >
+
+            <label for="reviewRating">
+                Your Rating
+            </label>
+
+            <select
+                id="reviewRating"
+                name="rating"
+                required
+            >
+                <option value="">
+                    Select a rating
+                </option>
+                <option value="5">★★★★★ - Excellent</option>
+                <option value="4">★★★★☆ - Very Good</option>
+                <option value="3">★★★☆☆ - Good</option>
+                <option value="2">★★☆☆☆ - Fair</option>
+                <option value="1">★☆☆☆☆ - Poor</option>
+            </select>
+
+            <label for="reviewMessage">
+                Your Review
+            </label>
+
+            <textarea
+                id="reviewMessage"
+                name="review_text"
+                minlength="10"
+                maxlength="2000"
+                placeholder="Tell us about your experience"
+                required
+            ></textarea>
+
+            <label for="reviewPhotos">
+                Upload Photos (Optional)
+            </label>
+
+            <input
+                type="file"
+                id="reviewPhotos"
+                name="photos"
+                accept="image/jpeg,image/png,image/webp"
+                multiple
+            >
+
+            <p>
+                Maximum 3 photos, 5 MB each.
+                Please upload only photos you have
+                permission to share.
+            </p>
+
+            <!-- Cloudflare CAPTCHA -->
+            <div
+                class="cf-turnstile"
+                data-sitekey="YOUR_SITE_KEY">
+            </div>
+
+            <button
+                type="submit"
+                class="btn btn-primary"
+                disabled
+            >
+                Submit Review (Coming Soon)
+            </button>
+
+            <p id="reviewStatus">
+                Review submissions will be enabled
+                after security testing.
+            </p>
+
+        </form>
+
+        <div class="section-heading">
+            <h3>What Our Customers Say</h3>
+            <div id="approvedReviews">
+                Approved customer reviews
+                will appear here.
+            </div>
+        </div>
+
+    </div>
+</section>
+
 
 
 </main>
