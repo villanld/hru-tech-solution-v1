@@ -62,3 +62,96 @@ async function testReviewConnection() {
     }
 }
 
+
+/* =====================================
+   HRU TECH SOLUTIONS
+   APPROVED CUSTOMER REVIEWS
+===================================== */
+
+const REVIEW_SUPABASE_URL =
+  "https://nneqgurexjpnhauxzqbu.supabase.co";
+
+// Replace with your Supabase Publishable key
+const REVIEW_PUBLIC_KEY =
+  "sb_publishable_XLZzFtUVSy309WVK4h8JjQ_ZDaKqW7I";
+
+async function loadApprovedReviews() {
+  const container = document.getElementById(
+    "approvedReviews"
+  );
+
+  if (!container) return;
+
+  container.textContent = "Loading customer reviews...";
+
+  try {
+    const response = await fetch(
+      `${REVIEW_SUPABASE_URL}/rest/v1/customer_reviews` +
+      "?select=id,customer_name,rating,review_text,created_at" +
+      "&order=created_at.desc&limit=20",
+      {
+        headers: {
+          "apikey": REVIEW_PUBLIC_KEY
+        }
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Unable to load reviews: ${response.status}`
+      );
+    }
+
+    const reviews = await response.json();
+
+    container.replaceChildren();
+
+    if (reviews.length === 0) {
+      container.textContent =
+        "No approved customer reviews yet.";
+      return;
+    }
+
+    reviews.forEach((review) => {
+      const card = document.createElement("div");
+      card.className = "review-card";
+
+      const name = document.createElement("h4");
+      name.textContent = review.customer_name;
+
+      const stars = document.createElement("p");
+      stars.className = "review-stars";
+
+      const rating = Number(review.rating);
+
+      stars.textContent =
+        "★".repeat(Math.max(0, Math.min(5, rating))) +
+        "☆".repeat(Math.max(0, 5 - rating));
+
+      const message = document.createElement("p");
+      message.textContent = review.review_text;
+
+      const date = document.createElement("small");
+
+      date.textContent = new Date(
+        review.created_at
+      ).toLocaleDateString();
+
+      card.append(name, stars, message, date);
+      container.appendChild(card);
+    });
+
+  } catch (error) {
+    console.error("Review loading error:", error);
+
+    container.textContent =
+      "Customer reviews are temporarily unavailable.";
+  }
+}
+
+document.addEventListener(
+  "DOMContentLoaded",
+  loadApprovedReviews
+);
+
+
